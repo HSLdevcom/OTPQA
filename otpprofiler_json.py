@@ -38,7 +38,7 @@ for router, rsites in ((tr, router_sites[tr]) for tr in test_routers):
 
     f = open('otpqa_report_%s.html' % router, 'w+')
     for site in rsites:
-        if site['name'] in skipped_sites:
+        if site['name'] in skipped_sites or "all" in skipped_sites:
             print("Skipping tests for " + site['name'])
             continue
         print(site['name'])
