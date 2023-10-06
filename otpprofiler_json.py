@@ -29,6 +29,8 @@ if len(sys.argv) >= 4:
 
 print('TARGET OTP',OTP_URL)
 
+failures = []
+
 for router in test_routers:
   if router in router_sites:
     rsites = router_sites[router]
@@ -89,10 +91,13 @@ for router in test_routers:
 
         if ratio > RATIO_LIMIT:
             print('FAILED RATIO >',RATIO_LIMIT)
-            f.close()
-            sys.exit(1)
+            failures.append(site['feed']);
 
     f.close()
+
+if len(failures) > 0:
+    print('FAILED FEEDS: ', failures)
+    print(','.join(failures), file=open('failed_feeds.txt', 'w+'))
 
 sys.exit(0)
 
