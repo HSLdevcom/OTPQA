@@ -97,7 +97,8 @@ for router in test_routers:
 
 if len(failures) > 0:
     print('FAILED FEEDS: ', failures)
-    print(','.join(failures), file=open('failed_feeds.txt', 'w+'))
+    with open('failed_feeds.txt', 'w+') as text_file:
+        text_file.write(','.join(failures))
 
 sys.exit(0)
 
