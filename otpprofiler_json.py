@@ -91,12 +91,15 @@ for router in test_routers:
 
         if ratio > RATIO_LIMIT:
             print('FAILED RATIO >',RATIO_LIMIT)
-            failures.append(site['feed']);
+            print(site['feed'])
+            failures.append(site['feed'])
 
     f.close()
 
 if len(failures) > 0:
-    print('FAILED FEEDS: ', failures)
+    print('FAILED FEEDS:')
+    for fail in failures:
+        print(fail)
     with open('failed_feeds.txt', 'w+') as text_file:
         text_file.write(','.join(failures))
 
