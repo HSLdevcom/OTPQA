@@ -9,7 +9,7 @@ from urllib.parse import urlparse, urlencode
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError
 
-import time, itertools, json
+import os, time, itertools, json
 import subprocess, urllib, random
 import pprint
 from copy import copy
@@ -52,6 +52,8 @@ IGNORED_DATES = set((
 ))
 
 TIME = '14:00:00'
+
+LOG_CALLS =  os.getenv('LOG_CALLS')
 
 # generate test date on a recent/upcoming monday. Use a fixed work day to keep results comparable
 cdate = date.today()
@@ -322,7 +324,8 @@ def response_callback_factory(row, profile):
         n += 1
         t = (time.time() - t0) / 60.0
         T = (N * t) / n
-        print("Request %d/%d, time %0.2f min of %0.2f (estimated) received" % (n, N, t, T), response, )
+        if LOG_CALLS:
+            print("Request %d/%d, time %0.2f min of %0.2f (estimated) received" % (n, N, t, T), response, )
         n_itin = 0
         elapsed = 0
         itineraries = []
@@ -361,7 +364,8 @@ def response_callback_factory(row, profile):
                 row['total_time'] = str(elapsed) + ' msec'
                 row['avg_time'] = None if n_itin == 0 else '%f msec' % (float(elapsed) / n_itin)
 
-        print(status)
+        if LOG_CALLS:
+            print(status)
         response_id = len(response_json)  # not threadsafe -- not atomic with following line
         response_json.append(row)
         row['status'] = response.status_code
