@@ -2,6 +2,7 @@
       "finland": [
         {
             "name": "reittiopas.hsl.fi",
+            "feed": "HSL",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "4",
@@ -10159,6 +10160,7 @@
         },
         {
             "name": "joensuu.digitransit.fi",
+            "feed": "Joensuu",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "11",
@@ -11876,6 +11878,7 @@
         },
         {
             "name": "hameenlinna.digitransit.fi",
+            "feed": "Hameenlinna",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "14",
@@ -13713,6 +13716,7 @@
         },
         {
             "name": "jyvaskyla.digitransit.fi",
+            "feed": "LINKKI",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "15",
@@ -16534,6 +16538,7 @@
         },
         {
             "name": "kuopio.digitransit.fi",
+            "feed": "Kuopio",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "16",
@@ -18795,6 +18800,7 @@
         },
         {
             "name": "lahti.digitransit.fi",
+            "feed": "Lahti",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "17",
@@ -21792,6 +21798,7 @@
         },
         {
             "name": "lappeenranta.digitransit.fi",
+            "feed": "Lappeenranta",
             "eps": 250,
             "hits_percentile": 40,
             "idsite": "18",
@@ -22437,6 +22444,7 @@
         },
         {
             "name": "oulu.digitransit.fi",
+            "feed": "OULU",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "21",
@@ -24074,6 +24082,7 @@
         },
         {
             "name": "turku.digitransit.fi",
+            "feed": "FOLI",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "27",
@@ -28735,6 +28744,7 @@
         },
         {
             "name": "kotka.digitransit.fi",
+            "feed": "Kotka",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "29",
@@ -29636,6 +29646,7 @@
         },
         {
             "name": "mikkeli.digitransit.fi",
+            "feed": "Mikkeli",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "31",
@@ -30409,6 +30420,7 @@
         },
         {
             "name": "tampere.digitransit.fi",
+            "feed": "tampere",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "35",
@@ -34758,6 +34770,7 @@
         },
         {
             "name": "kouvola.digitransit.fi",
+            "feed": "Kouvola",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "43",
@@ -35827,6 +35840,7 @@
         },
         {
             "name": "rovaniemi.digitransit.fi",
+            "feed": "Rovaniemi",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "49",
@@ -36954,6 +36968,7 @@
     "hsl": [
         {
             "name": "reittiopas.hsl.fi",
+            "feed": "HSL",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "4",
@@ -47114,6 +47129,7 @@
     "waltti": [
         {
             "name": "joensuu.digitransit.fi",
+            "feed": "Joensuu",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "11",
@@ -48831,6 +48847,7 @@
         },
         {
             "name": "hameenlinna.digitransit.fi",
+            "feed": "Hameenlinna",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "14",
@@ -50668,6 +50685,7 @@
         },
         {
             "name": "jyvaskyla.digitransit.fi",
+            "feed": "LINKKI",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "15",
@@ -53489,6 +53507,7 @@
         },
         {
             "name": "kuopio.digitransit.fi",
+            "feed": "Kuopio",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "16",
@@ -55750,6 +55769,7 @@
         },
         {
             "name": "lahti.digitransit.fi",
+            "feed": "Lahti",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "17",
@@ -58747,6 +58767,7 @@
         },
         {
             "name": "lappeenranta.digitransit.fi",
+            "feed": "Lappeenranta",
             "eps": 250,
             "hits_percentile": 40,
             "idsite": "18",
@@ -59392,6 +59413,7 @@
         },
         {
             "name": "oulu.digitransit.fi",
+            "feed": "OULU",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "21",
@@ -61029,6 +61051,7 @@
         },
         {
             "name": "turku.digitransit.fi",
+            "feed": "FOLI",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "27",
@@ -65690,6 +65713,7 @@
         },
         {
             "name": "kotka.digitransit.fi",
+            "feed": "Kotka",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "29",
@@ -66591,6 +66615,7 @@
         },
         {
             "name": "mikkeli.digitransit.fi",
+            "feed": "Mikkeli",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "31",
@@ -67364,6 +67389,7 @@
         },
         {
             "name": "tampere.digitransit.fi",
+            "feed": "tampere",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "35",
@@ -71713,6 +71739,7 @@
         },
         {
             "name": "kouvola.digitransit.fi",
+            "feed": "Kouvola",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "43",
@@ -72782,6 +72809,7 @@
         },
         {
             "name": "rovaniemi.digitransit.fi",
+            "feed": "Rovaniemi",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "49",
@@ -73909,6 +73937,7 @@
     "varely": [
         {
             "name": "varely.digitransit.fi",
+            "feed": "VARELY",
             "eps": 100,
             "hits_percentile": 50,
             "idsite": "50",

@@ -23,21 +23,20 @@ period = 'month'
 client_cert = 'client.pem'
 
 sites_router = {
-    '4': {'name': 'reittiopas.hsl.fi', 'router': ('hsl','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    #'opas.matka.fi': {'router': ('finland',), 'eps': 250, 'min_samples': 2, 'hits_percentile': 40},
-    '11': {'name': 'joensuu.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '27': {'name': 'turku.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '14': {'name': 'hameenlinna.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '15': {'name': 'jyvaskyla.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '16': {'name': 'kuopio.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '17': {'name': 'lahti.digitransit.fi', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '18': {'name': 'lappeenranta.digitransit.fi', 'router': ('waltti','finland'), 'eps': 250, 'min_samples': 2, 'hits_percentile': 40},
-    '21': {'name': 'oulu.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '29': {'name': 'kotka.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '31': {'name': 'mikkeli.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '35': {'name': 'tampere.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '43': {'name': 'kouvola.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
-    '49': {'name': 'rovaniemi.digitransit.fi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '4': {'name': 'reittiopas.hsl.fi', 'feed': 'HSL', 'router': ('hsl','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '11': {'name': 'joensuu.digitransit.fi', 'feed': 'Joensuu', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '27': {'name': 'turku.digitransit.fi', 'feed': 'FOLI', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '14': {'name': 'hameenlinna.digitransit.fi', 'feed': 'Hameenlinna', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '15': {'name': 'jyvaskyla.digitransit.fi', 'feed': 'LINKKI', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '16': {'name': 'kuopio.digitransit.fi', 'feed': 'Kuopio', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '17': {'name': 'lahti.digitransit.fi', 'feed': 'Lahti', 'router': ('waltti','finland'), 'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '18': {'name': 'lappeenranta.digitransit.fi', 'feed': 'Lappeenranta', 'router': ('waltti','finland'), 'eps': 250, 'min_samples': 2, 'hits_percentile': 40},
+    '21': {'name': 'oulu.digitransit.fi', 'feed': 'Oulu', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '29': {'name': 'kotka.digitransit.fi', 'feed': 'Kotka', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '31': {'name': 'mikkeli.digitransit.fi', 'feed': 'Mikkeli', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '35': {'name': 'tampere.digitransit.fi', 'feed': 'tampere', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '43': {'name': 'kouvola.digitransit.fi', 'feed': 'Kouvola', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
+    '49': {'name': 'rovaniemi.digitransit.fi', 'feed': 'Rovaniemi', 'router': ('waltti','finland'),'eps': 100, 'min_samples': 2, 'hits_percentile': 50},
 }
 
 router_sites = {}
