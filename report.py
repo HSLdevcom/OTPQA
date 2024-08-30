@@ -7,13 +7,6 @@ def parsetime(aa):
 
 	return float( aa.split()[0] )
 
-def itins_ridetime_tuple(resp):
-	ret = []
-
-	for itin in resp['itins']:
-		ret.append( int(itin['ride_time_sec']) )
-
-	return tuple(ret)
 
 def main(filenames):
 
@@ -51,7 +44,6 @@ def main(filenames):
 		for i in range(len(datasets)):
 			print responses[i]['avg_time'],
 			print "\t",
-			print itins_ridetime_tuple(responses[i]),
 			print "\t",
 		print
 

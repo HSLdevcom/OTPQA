@@ -99,7 +99,7 @@ def pairs(iterable):
         yield (x, next(it, None))
 
 
-def get_params(fast, count, filename="requests.json", requests_json=None, modes=None):
+def get_params(fast, count, filename="requests.json", requests_json=None, modes=None, Date=None, Time=None):
     if requests_json is None and filename is not None:
         requests_json = json.load(open(filename))
     requests = requests_json['requests']
@@ -150,6 +150,23 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
         req['toPlace'] = "%s,%s" % (target['lat'], target['lon'])
         req['walkSpeed'] = 1.222
 
+        from_location = {"coordinate": {
+            "latitude": float(req['fromPlace'].split(',')[0]),
+            "longitude": float(req['fromPlace'].split(',')[1])
+            }}
+
+        to_location = {"coordinate": {
+            "latitude": float(req['toPlace'].split(',')[0]),
+            "longitude": float(req['toPlace'].split(',')[1])
+        }}
+
+        offsetDateTime = "%sT%s+03:00" % (Date, Time)  #TODO
+        variables = {
+             "datetime":  {"earliestDeparture": offsetDateTime},
+             "fromPlace": {"location":from_location },
+             "toPlace": {"location":to_location}
+        }
+        req['variables'] = variables
         if req['fromPlace'] == req['toPlace']:
             continue
 
@@ -213,32 +230,32 @@ def summarize_plan(itinerary):
     leg_times = []
     n_vehicles = 0
     n_legs = 0
-    for leg in itinerary['legs']:
+    legs = itinerary['node']['legs']
+    for leg in legs:
         n_legs += 1
         leg_modes.append(leg['mode'])
         leg_times.append((leg['endTime'] - leg['startTime']) / 1000)
-        if 'route' in leg and len(leg['route']) > 0:
+        route = leg['route']
+        if route and route is not None:
             routes.append(leg['route'])
-            trips.append(leg['tripId'])
+            trips.append(leg['trip']['gtfsId'])
             n_vehicles += 1
-            wait = (leg['from']['departure'] - leg['from']['arrival'] if 'arrival' in leg['from'] else leg['from'][
-                'departure']) / 1000
+            wait = (leg['from']['departureTime'] - leg['from']['arrivalTime'] if 'arrivalTime' in leg['from'] else leg['from'][
+                'departureTime']) / 1000
             # print(' - wait = %d'%(wait))
             waits.append(wait)
     ret = {
-        'start_time': time.asctime(time.gmtime(itinerary['startTime'] / 1000)) + ' GMT',
-        'duration': '%d sec' % int(itinerary['duration']),
+        'start_time': time.asctime(time.gmtime(itinerary['node']['startTime'] / 1000)) + ' GMT',
+        'duration': '%d sec' % int(itinerary['node']['duration']),
         'n_legs': n_legs,
         'n_vehicles': n_vehicles,
-        'walk_distance': itinerary['walkDistance'],
-        'walk_limit_exceeded': itinerary['walkLimitExceeded'],
-        'wait_time_sec': itinerary['waitingTime'],
-        'ride_time_sec': itinerary['transitTime'],
+        'walk_distance': itinerary['node']['walkDistance'],
+        'wait_time_sec': itinerary['node']['waitingTime'],
         'routes': routes,
         'trips': trips,
         'waits': waits,
         'leg_modes': leg_modes,
-        'leg_times': leg_times
+        'leg_times': leg_times,
     }
     return ret
 
@@ -253,7 +270,6 @@ def summarize_profile(option):
     n_vehicles = 0
     n_legs = 0
     wait_time_sec = 0
-    ride_time_sec = 0
 
     if 'transit' in option:
         if 'access' in option:
@@ -271,7 +287,6 @@ def summarize_profile(option):
 
             avg_ride_time = transit_leg['rideStats']['avg']
             leg_times.append(avg_ride_time)
-            ride_time_sec += avg_ride_time
 
             if len(transit_leg['routes']) == 1:
                 routes.append(transit_leg['routes'][0]['id'])
@@ -293,7 +308,6 @@ def summarize_profile(option):
         'n_legs': n_legs,
         'n_vehicles': n_vehicles,
         'wait_time_sec': wait_time_sec,
-        'ride_time_sec': ride_time_sec,
         'routes': routes,
         'waits': waits,
         'leg_modes': leg_modes,
@@ -345,7 +359,7 @@ def response_callback_factory(row, profile):
                 else:
                     status = 'no paths'
             else:
-                row['query_type'] = 'plan'
+                row['query_type'] = 'planConnection'
                 if 'debugOutput' in objs:
                     row['debug'] = objs['debugOutput']
                     elapsed = objs['debugOutput']['totalTime']
@@ -353,8 +367,8 @@ def response_callback_factory(row, profile):
                     row['debug'] = None
                     elapsed = 0
 
-                if 'plan' in objs:
-                    itineraries = objs['plan']['itineraries']
+                if 'data' in objs:
+                    itineraries = objs['data']['plan']['edges']
                     n_itin = len(itineraries)
                     # check response for timeout flag
                     status = 'complete'
@@ -438,30 +452,28 @@ def run(connect_args, requests_json=None):
     run_row = (notes, run_time_id)
     run_json = dict(zip(('notes', 'id'), run_row))
 
-    all_params = get_params(fast, count, requests_json=requests_json, modes=modes)
+    all_params = get_params(fast, count, requests_json=requests_json, modes=modes, Date=Date, Time=Time)
 
     t0 = time.time()
     N = len(all_params)
     reqs = []
     for params in all_params:
+        variables =  params['variables']
         params = dict(params)  # TODO necessary?
         request_id = params.pop('id')
         oid = params.pop('oid')
         tid = params.pop('tid')
-
+        params['id'] = 'PlanConnectionQuery'
         params['date'] = Date
         params['time'] = Time
         if profile:
-            api_method = 'profile'
-            params['from'] = params.pop('fromPlace')
-            params['to'] = params.pop('toPlace')
-            params['modes'] = params.pop('mode')
+            params['id'] = 'profile'
+            params['from'] =variables['fromPlace']
+            params['to'] = variables['toPlace']
+            params['modes'] = params.pop['mode']
             params['limit'] = 3
         else:
-            api_method = 'plan'
             params['numItineraries'] = num_itineraries
-
-        qstring = urlencode(params)
 
         if "http" in host:
             url = host
@@ -475,7 +487,7 @@ def run(connect_args, requests_json=None):
         if not url.endswith('/'):
             url = url + "/"
 
-        url = "%s%s?%s" % (url, api_method, qstring)
+        url = "%sindex/graphql" % (url)
 
         # Tomcat server + spaces in URLs -> HTTP 505 confusion
         if SHOW_PARAMS:
@@ -489,14 +501,64 @@ def run(connect_args, requests_json=None):
                'origin_id': oid,
                'target_id': tid,
                'id_tuple': "%s-%s-%s" % (oid, tid, request_id),
-               'mode': params['mode'] if 'mode' in params else params['modes'],
-               'membytes': None, 'from': params['fromPlace'], 'to': params['toPlace']}
+               'mode': params['mode'] if 'mode' in variables else params['mode'],
+               'membytes': None,
+               'from': variables['fromPlace'],
+               'to': variables['toPlace']
+                }
         # You can't give arguments to the response callback, you have to make a factory function:
         # "http://stackoverflow.com/questions/25115151/how-to-pass-parameters-to-hooks-in-python-grequests"
         # Closures are created in Python by function calls.
         response_callback = response_callback_factory(row, profile)
-        headers = {'Accept': 'application/json'}
-        req = grequests.get(url, headers=headers, hooks=dict(response=response_callback))
+        headers = {'Content-Type': 'application/json'}
+        query = """
+            query PlanConnectionQuery(
+            $fromPlace: PlanLabeledLocationInput!,
+            $toPlace: PlanLabeledLocationInput!,
+            $after: String,
+            $first: Int,
+            $before: String,
+            $last: Int,
+            $datetime: PlanDateTimeInput!
+            ) {
+                plan: planConnection(
+                dateTime: $datetime,
+                after: $after,
+                first: $first,
+                before: $before,
+                last: $last,
+                origin: $fromPlace,
+                destination: $toPlace
+                ) {
+                edges {
+                    node {
+                    startTime
+                    duration
+                    walkDistance
+                    waitingTime
+                    legs {
+                        startTime
+                        endTime
+                        mode
+                        duration
+                        route {
+                        id
+                        }
+                        trip {
+                        gtfsId
+                        }
+                        from {
+                        arrivalTime
+                        departureTime
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            """
+        pl =  {"query": query, "variables": variables}
+        req = grequests.post(url, headers=headers, data=json.dumps(pl), hooks=dict(response=response_callback))
         reqs.append(req)
 
     def exception_handler(request, exception):

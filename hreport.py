@@ -72,14 +72,9 @@ th, td {
         if dt_url is not None:
 
             otpurl = datasets[0][id_tuple]['url']
-            otpurl_parsed = urlparse(otpurl)
-            otpurl_params = parse_qs(otpurl_parsed.query)
 
-            otptst = datetime.strptime('%s %s' % (otpurl_params['date'][0],otpurl_params['time'][0]),'%Y-%m-%d %H:%M')
-            otptst = (otptst - datetime(1970, 1, 1)).total_seconds()
-
-            dturl = 'http://' + dt_url + '/reitti/from::%s/to::%s?time=%d' % \
-                                          (datasets[0][id_tuple]['from'], datasets[0][id_tuple]['to'],otptst)
+            dturl = 'http://' + dt_url + '/reitti/from::%s/to::%s' % \
+                                          (datasets[0][id_tuple]['from'], datasets[0][id_tuple]['to'])
 
         yield """<tr><td rowspan="2" width="120">OTP: <a href="%s">%s</a><br/>DT: <a href="%s">%s</a></td>""" % \
               (otpurl, id_tuple, dturl, id_tuple)
@@ -111,11 +106,6 @@ th, td {
             if len(response['itins']) == 0:
                 dataset_fails[i] += 1
                 yield "<td style=\"background-color:#EDA1A1\">NONE</td></tr></table></tr>"
-                continue
-
-            if all((itin['walk_limit_exceeded'] for itin in response['itins'])):
-                dataset_fails[i] += 1
-                yield "<td style=\"background-color:#EDA1A1\">LONG WALK (%.1f km)</td></tr></table></tr>" % (min((itin['walk_distance'] for itin in response['itins']))/1000.0)
                 continue
 
             for itin in response['itins']:
