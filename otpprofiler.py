@@ -13,7 +13,8 @@ import os, time, itertools, json
 import subprocess, urllib, random
 import pprint
 from copy import copy
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from zoneinfo import ZoneInfo
 from random import randint, seed
 from vincenty import vincenty_inverse
 
@@ -159,8 +160,12 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
             "latitude": float(req['toPlace'].split(',')[0]),
             "longitude": float(req['toPlace'].split(',')[1])
         }}
+        d = list(map(int, Date.split('-')))
+        t = list(map(int, Time.split(':')))
 
-        offsetDateTime = "%sT%s+03:00" % (Date, Time)  #TODO
+        dt = datetime.datetime(d[0], d[1], d[2], t[0], t[1], tzinfo=ZoneInfo("Europe/Helsinki"))
+        offsetDateTime = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
+        offsetDateTime = offsetDateTime[:-2] + ":" + offsetDateTime[-2:]
         variables = {
              "datetime":  {"earliestDeparture": offsetDateTime},
              "fromPlace": {"location":from_location },
@@ -584,6 +589,9 @@ def run(connect_args, requests_json=None):
 
 
 import argparse
+from datetime import datetime, timedelta
+import pytz
+import datetime
 
 if __name__ == "__main__":
     import argparse  # optparse is deprecated
