@@ -149,7 +149,6 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
         req['tid'] = target['id']
         req['fromPlace'] = "%s,%s" % (origin['lat'], origin['lon'])
         req['toPlace'] = "%s,%s" % (target['lat'], target['lon'])
-        req['walkSpeed'] = 1.222
 
         from_location = {"coordinate": {
             "latitude": float(req['fromPlace'].split(',')[0]),
@@ -164,23 +163,44 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
         t = list(map(int, Time.split(':')))
 
         dt = datetime.datetime(d[0], d[1], d[2], t[0], t[1], tzinfo=ZoneInfo("Europe/Helsinki"))
-        offsetDateTime = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
-        offsetDateTime = offsetDateTime[:-2] + ":" + offsetDateTime[-2:]
+        offset_datetime = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
+        offset_datetime = offset_datetime[:-2] + ":" + offset_datetime[-2:]
+        latest_arrival = req.get('arriveBy', False)
+        datetime_key = 'latestArrival' if latest_arrival else 'earliestDeparture'
+        modes = req['mode'].split(',')
+
+        if req['mode'] in ('WALK','BICYCLE'):
+            dist = vincenty_inverse((origin['lat'], origin['lon']),(target['lat'], target['lon']))
+            if dist > (0.9/1000)*req['maxWalkDistance']:
+                modes.append('TRANSIT')
+
+        direct_only = 'TRANSIT' not in modes
+
+        direct = modes if direct_only else None
+        if 'TRANSIT' in modes:
+            modes.remove('TRANSIT')
+
+        transit = {
+            'access': modes if  not direct_only else 'WALK',
+            'egress': modes if not direct_only else 'WALK',
+            'transfer': modes if not direct_only else 'WALK',
+        }
+
+        plan_modes_input = {
+            'directOnly': direct_only,
+            'direct': direct,
+            'transit': transit,
+        }
+
         variables = {
-             "datetime":  {"earliestDeparture": offsetDateTime},
-             "fromPlace": {"location":from_location },
-             "toPlace": {"location":to_location}
+            "datetime": {datetime_key: offset_datetime},
+            "fromPlace": {"location": from_location},
+            "toPlace": {"location": to_location},
+            "modes": plan_modes_input
         }
         req['variables'] = variables
         if req['fromPlace'] == req['toPlace']:
             continue
-
-        if modes is None:
-            dist = vincenty_inverse((origin['lat'], origin['lon']),(target['lat'], target['lon']))
-            if dist > (0.9/1000)*req['maxWalkDistance'] and req['mode'] in ('BICYCLE','WALK'):
-                req['mode'] += ',TRANSIT'
-        else:
-            req['mode'] = modes
 
         ret.append(req)
 
@@ -353,6 +373,9 @@ def response_callback_factory(row, profile):
         else:
             row['itins'] = []
             objs = response.json()
+            if 'errors' in objs:
+                status = 'failed'
+                print(objs['errors'])
             if profile:
                 row['query_type'] = 'profile'
                 if 'options' in objs:
@@ -473,7 +496,7 @@ def run(connect_args, requests_json=None):
         params['time'] = Time
         if profile:
             params['id'] = 'profile'
-            params['from'] =variables['fromPlace']
+            params['from'] = variables['fromPlace']
             params['to'] = variables['toPlace']
             params['modes'] = params.pop['mode']
             params['limit'] = 3
@@ -520,20 +543,14 @@ def run(connect_args, requests_json=None):
             query PlanConnectionQuery(
             $fromPlace: PlanLabeledLocationInput!,
             $toPlace: PlanLabeledLocationInput!,
-            $after: String,
-            $first: Int,
-            $before: String,
-            $last: Int,
-            $datetime: PlanDateTimeInput!
+            $datetime: PlanDateTimeInput!,
+            $modes: PlanModesInput
             ) {
                 plan: planConnection(
                 dateTime: $datetime,
-                after: $after,
-                first: $first,
-                before: $before,
-                last: $last,
                 origin: $fromPlace,
-                destination: $toPlace
+                destination: $toPlace,
+                modes: $modes
                 ) {
                 edges {
                     node {
@@ -590,7 +607,6 @@ def run(connect_args, requests_json=None):
 
 import argparse
 from datetime import datetime, timedelta
-import pytz
 import datetime
 
 if __name__ == "__main__":

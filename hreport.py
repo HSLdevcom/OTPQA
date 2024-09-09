@@ -72,10 +72,9 @@ th, td {
         if dt_url is not None:
 
             otpurl = datasets[0][id_tuple]['url']
-
-            dturl = 'http://' + dt_url + '/reitti/from::%s/to::%s' % \
-                                          (datasets[0][id_tuple]['from'], datasets[0][id_tuple]['to'])
-
+            fr = str(datasets[0][id_tuple]['from']['location']['coordinate']['latitude']) + ',' + str(datasets[0][id_tuple]['from']['location']['coordinate']['longitude'])
+            to = str(datasets[0][id_tuple]['to']['location']['coordinate']['latitude']) + ',' + str(datasets[0][id_tuple]['to']['location']['coordinate']['longitude'])
+            dturl = 'http://' + dt_url + '/reitti/from::%s/to::%s' % (fr, to)
         yield """<tr><td rowspan="2" width="120">OTP: <a href="%s">%s</a><br/>DT: <a href="%s">%s</a></td>""" % \
               (otpurl, id_tuple, dturl, id_tuple)
         for i, dataset in enumerate(datasets):
