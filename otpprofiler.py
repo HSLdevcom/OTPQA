@@ -162,7 +162,7 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
         d = list(map(int, Date.split('-')))
         t = list(map(int, Time.split(':')))
 
-        dt = datetime.datetime(d[0], d[1], d[2], t[0], t[1], tzinfo=ZoneInfo("Europe/Helsinki"))
+        dt = datetime(d[0], d[1], d[2], t[0], t[1], tzinfo=ZoneInfo("Europe/Helsinki"))
         offset_datetime = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
         offset_datetime = offset_datetime[:-2] + ":" + offset_datetime[-2:]
         latest_arrival = req.get('arriveBy', False)
@@ -606,8 +606,6 @@ def run(connect_args, requests_json=None):
 
 
 import argparse
-from datetime import datetime, timedelta
-import datetime
 
 if __name__ == "__main__":
     import argparse  # optparse is deprecated
