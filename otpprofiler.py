@@ -190,6 +190,7 @@ def get_params(fast, count, filename="requests.json", requests_json=None, modes=
             'directOnly': direct_only,
             'direct': direct,
             'transit': transit,
+            'transitOnly': not direct_only
         }
 
         variables = {
