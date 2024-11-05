@@ -71,10 +71,6 @@ for router in test_routers:
                 nfailed += 1
                 continue
 
-            if all((itin['walk_limit_exceeded'] for itin in r['itins'])):
-                nfailed += 1
-                continue
-
             if len(r['itins']) == 0:
                 nnone += 1
 
