@@ -37,7 +37,7 @@ Then run the profiler with
     $ python otpprofiler.py hostname
 
 Here hostname can be briefly a digitransit service API root address such as 'api.digitransit.fi',
-or a full path to a local OTP instance routing: 'localhost:9080/otp/routers/default'.
+or a full path to a local OTP instance routing: 'localhost:9080/otp/gtfs/v1'.
 
 That will generate run_summary.TIMESTAMP.json and full_itins.TIMESTAMP.json
 That one can do with what one pleases.
@@ -64,7 +64,7 @@ Generate a benchmark file:
 
     $ python otpprofiler.py -o hostname
 
-    where hostname is, for example, http://localhost:8888/otp/routers/hsl/
+    where hostname is, for example, http://localhost:8888/otp/gtfs/v1
     When using the flag -o, profiler generates run_summary and full_itins JSON files.
     run_summary file can then be later used as a comparison file.
     You can also use parameters when running the profiler such as -i 5 and then five itineraries are fetched instead of just one.
