@@ -15,7 +15,7 @@ f = open('otpqa_router_requests.json')
 router_sites = json.load(f)
 f.close()
 
-OTP_URL = 'https://dev-api.digitransit.fi/routing/v1/routers/%s'
+OTP_URL = 'https://dev-api.digitransit.fi/routing/v2/hsl/gtfs/v1'
 if len(sys.argv) >= 2:
     OTP_URL = sys.argv[1]
 
@@ -37,8 +37,6 @@ for router in test_routers:
     print(router)
 
     router_url = OTP_URL
-    if OTP_URL.find('%s') > -1:
-        router_url = OTP_URL % router
 
     f = open('otpqa_report_%s.html' % router, 'w+')
     for site in rsites:

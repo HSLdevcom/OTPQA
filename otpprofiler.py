@@ -510,13 +510,8 @@ def run(connect_args, requests_json=None):
             url = "http://" + host
 
         # check if url path requires completion
-        if (not "/otp/routers" in host) and (not "/routing/v1/routers" in host):
-            url = url + "/routing/v1/routers/hsl"
-
-        if not url.endswith('/'):
-            url = url + "/"
-
-        url = "%sindex/graphql" % (url)
+        if (not "/otp/gtfs/v1" in host):
+            url = url + "/otp/gtfs/v1"
 
         # Tomcat server + spaces in URLs -> HTTP 505 confusion
         if SHOW_PARAMS:
