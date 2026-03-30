@@ -17,6 +17,7 @@ from datetime import date, timedelta, datetime
 from zoneinfo import ZoneInfo
 from random import randint, seed
 from vincenty import vincenty_inverse
+from workday import workday
 
 import sys
 
@@ -24,33 +25,6 @@ import sys
 # the author has moved it to https://github.com/kennethreitz/grequests
 # python-requests wraps urllib2 providing a much nicer API.
 import grequests
-
-IGNORED_DATES = set((
-    '-12-06',
-    '-12-24',
-    '-12-25',
-    '-12-26',
-    '-12-31',
-    '-01-01',
-    '-01-06',
-    '-05-01',
-    '2022-04-15',
-    '2022-04-18',
-    '2022-05-26',
-    '2022-06-24',
-    '2023-04-07',
-    '2023-04-10',
-    '2023-05-18',
-    '2023-06-23',
-    '2024-03-29',
-    '2024-04-01',
-    '2024-05-09',
-    '2024-06-21',
-    '2025-04-18',
-    '2025-04-21',
-    '2025-05-29',
-    '2025-06-20'
-))
 
 TIME = '14:00:00'
 
@@ -61,10 +35,7 @@ cdate = date.today()
 cdate -= timedelta(days=cdate.weekday())
 cdate += timedelta(days=7)
 
-while cdate.strftime('%Y-%m-%d') in IGNORED_DATES or cdate.strftime('-%m-%d') in IGNORED_DATES:
-    cdate += timedelta(days=1)
-
-while cdate.weekday() not in set((0,1,2,3,4)):
+while not workday(cdate):
     cdate += timedelta(days=1)
 
 DATE = cdate.strftime('%Y-%m-%d')
